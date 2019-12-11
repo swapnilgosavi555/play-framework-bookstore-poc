@@ -18,11 +18,10 @@ class BooksStore() {
   val connection = driver.connection(List("localhost"))
   val database = Await.result(connection.database("bookstore"), 10.seconds)
   val collection = database.collection[BSONCollection]("bookrecord")
-  /*implicit val bookHandler: BSONHandler[BSONDocument, Book] =
-    Macros.handler[Book]*/
+
   implicit val bookreads = Macros.reader[Book]
   implicit val bookWrites = Macros.writer[Book]
-  val list = List(Book("1", "java", "durga"), Book("2", "scala", "swapnil"))
+
   val bookform = Form(
     mapping(
       "id" -> nonEmptyText,
@@ -45,11 +44,7 @@ class BooksStore() {
       .cursor[Book](ReadPreference.Primary)
       .collect[List](-1, FailOnError[List[Book]]())
   }
-  def checkBook(id: String) = {
-    val list1 = list.filter(_.id == id)
-    if (list1.isEmpty) false
-    else true
-  }
+
   def update(id: String, book: Book) = {
     val selector = BSONDocument("id" -> id)
     val modifier =

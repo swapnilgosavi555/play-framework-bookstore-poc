@@ -19,12 +19,6 @@ class BookController @Inject()(cc: ControllerComponents)(
     }
   }
 
-  def checkBook(id: String) = Action {
-    if (booksStore.checkBook(id)) {
-      Ok("Book is present in BookStore")
-    } else Ok(s"Book is not present in BookStore of id:$id")
-  }
-
   def insertBook() = Action { implicit request =>
     Ok(views.html.insertbookform(booksStore.bookform))
   }
